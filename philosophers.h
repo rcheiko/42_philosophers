@@ -6,7 +6,7 @@
 /*   By: rcheiko <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 12:20:38 by rcheiko           #+#    #+#             */
-/*   Updated: 2021/07/21 16:58:54 by rcheiko          ###   ########.fr       */
+/*   Updated: 2021/07/21 18:06:11 by rcheiko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int			ft_strlen(const char *str);
 int			char_digit(char c);
 //error
 int			error(int ac, char **av);
+int			error_2(int ac, char **av);
 //fill_struct
 void		fill_struct(int ac, char **av, t_total *d);
 void		fill_struct_2(int ac, char **av, int i, t_total *d);
