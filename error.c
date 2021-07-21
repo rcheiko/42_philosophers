@@ -6,7 +6,7 @@
 /*   By: rcheiko <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 12:38:36 by rcheiko           #+#    #+#             */
-/*   Updated: 2021/07/19 16:27:01 by rcheiko          ###   ########.fr       */
+/*   Updated: 2021/07/21 17:57:05 by rcheiko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int	error(int ac, char **av)
 
 	i = 1;
 	j = 0;
+	if (ft_atoi(av[1]) == 0)
+	{
+		printf("Error you need minimum one philosopher\n");
+		return (1);
+	}
 	if (ac != 5 && ac != 6)
 	{
 		printf("Error number of arguments.\n");
