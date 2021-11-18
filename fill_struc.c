@@ -6,7 +6,7 @@
 /*   By: rcheiko <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 13:59:33 by rcheiko           #+#    #+#             */
-/*   Updated: 2021/07/21 17:19:46 by rcheiko          ###   ########.fr       */
+/*   Updated: 2021/10/05 14:28:18 by rcheiko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	fill_struct(int ac, char **av, t_total *d)
 
 	i = 0;
 	k = -1;
-	g_d = 0;
 	if (ac != 6)
 		d->nb_eat_total = -1;
 	else
@@ -30,11 +29,12 @@ void	fill_struct(int ac, char **av, t_total *d)
 	d->t_sleep = ft_atoi(av[4]);
 	if (d->nb_philo == 1)
 	{
-		printf("%ld %d dead\n", get_time() - get_time(), d->nb_philo - 1);
+		printf("%d %d has taken a fork\n", 0, 1);
+		printf("%d %d dead\n", ft_atoi(av[2]) + 1, d->nb_philo);
 		return ;
 	}
 	d->ph = malloc(sizeof(t_philo) * (d->nb_philo));
-	g_mut = malloc(sizeof (pthread_mutex_t) * (d->nb_philo));
+	g_mut = malloc(sizeof(pthread_mutex_t) * (d->nb_philo));
 	while (++k < d->nb_philo)
 		pthread_mutex_init(&g_mut[k], NULL);
 	fill_struct_2(ac, av, i, d);
@@ -43,6 +43,8 @@ void	fill_struct(int ac, char **av, t_total *d)
 
 void	fill_struct_2(int ac, char **av, int i, t_total *d)
 {
+	pthread_t	death;
+
 	pthread_mutex_init(&g_death, NULL);
 	pthread_mutex_lock(&g_death);
 	while (i < d->nb_philo)
@@ -60,7 +62,8 @@ void	fill_struct_2(int ac, char **av, int i, t_total *d)
 		d->ph[i].t_sleep = ft_atoi(av[4]);
 		d->ph[i].time = get_time();
 		pthread_create(&d->ph[i].phil, NULL, &thread_crea, &d->ph[i]);
-		usleep(1000);
 		i++;
 	}
+	pthread_create(&death, NULL, &death_philo, d->ph);
+	pthread_join(death, NULL);
 }

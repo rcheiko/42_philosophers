@@ -6,11 +6,27 @@
 /*   By: rcheiko <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 12:51:41 by rcheiko           #+#    #+#             */
-/*   Updated: 2021/07/21 17:17:32 by rcheiko          ###   ########.fr       */
+/*   Updated: 2021/10/21 23:17:39 by rcheiko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	count_nb_eat_total(t_philo *ph)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (ph[i].nb_philo > i)
+	{
+		if (ph[i].nb_eat_total != -1 && ph[i].nb_eat == ph[i].nb_eat_total)
+			count++;
+		i++;
+	}
+	return (count);
+}
 
 int	main(int ac, char **av)
 {

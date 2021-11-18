@@ -6,7 +6,7 @@
 /*   By: rcheiko <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 15:57:15 by rcheiko           #+#    #+#             */
-/*   Updated: 2021/07/21 17:20:18 by rcheiko          ###   ########.fr       */
+/*   Updated: 2021/10/21 23:13:19 by rcheiko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	*thread_crea(void *arg)
 
 	ph = arg;
 	ph->time = get_time();
+	if (ph->id % 2 != 0)
+		ft_usleep(ph->t_eat);
 	while (1)
 	{
 		eat(ph);
@@ -29,7 +31,8 @@ void	*thread_crea(void *arg)
 
 void	eat(t_philo *ph)
 {
-	dead_philo(ph);
+	if (ph->nb_eat == ph->nb_eat_total)
+		return ;
 	if (ph->id == 0)
 		pthread_mutex_lock(&g_mut[ph->nb_philo - 1]);
 	else
@@ -38,44 +41,47 @@ void	eat(t_philo *ph)
 	print_fork(ph);
 	ph->nb_eat++;
 	ph->last_eat = get_time() - ph->time;
-	usleep(ph->t_eat * 1000);
+	ft_usleep(ph->t_eat);
 	if (ph->id == 0)
 		pthread_mutex_unlock(&g_mut[ph->nb_philo - 1]);
 	else
 		pthread_mutex_unlock(&g_mut[ph->id - 1]);
 	pthread_mutex_unlock(&g_mut[ph->id]);
-	usleep(100);
 }
 
 void	sleep_philo(t_philo *ph)
 {
-	dead_philo(ph);
 	print_sleep(ph);
-	usleep(ph->t_sleep * 1000);
+	ft_usleep(ph->t_sleep);
 }
 
 void	think(t_philo *ph)
 {
-	dead_philo(ph);
 	print_think(ph);
 }
 
-void	dead_philo(t_philo *ph)
+void	*death_philo(void *arg)
 {
-	if ((get_time() - ph->time) - ph->last_eat > ph->t_die && g_d == 0)
+	int		i;
+	int		count;
+	t_philo	*ph;
+
+	ph = arg;
+	while (1)
 	{
-		g_d = 1;
-		pthread_mutex_lock(&g_write);
-		usleep(3000);
-		printf("%ld %d dead\n", get_time() - ph->time, ph->id);
-		pthread_mutex_unlock(&g_death);
-		usleep(1000);
-	}
-	if (ph->nb_eat_total != -1 && ph->nb_eat >= ph->nb_eat_total)
-	{
-		pthread_mutex_lock(&g_write);
-		usleep(1000);
-		pthread_mutex_unlock(&g_death);
-		usleep(1000);
+		count = count_nb_eat_total(ph);
+		i = 0;
+		while (ph[i].nb_philo - 1 > i)
+		{
+			if (check_death(ph, i) == 1)
+				return (NULL);
+			i++;
+		}
+		if (count == ph[0].nb_philo)
+		{
+			pthread_mutex_lock(&g_write);
+			pthread_mutex_unlock(&g_death);
+			return (NULL);
+		}
 	}
 }

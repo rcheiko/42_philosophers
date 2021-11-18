@@ -6,7 +6,7 @@
 /*   By: rcheiko <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 12:20:38 by rcheiko           #+#    #+#             */
-/*   Updated: 2021/07/21 18:06:11 by rcheiko          ###   ########.fr       */
+/*   Updated: 2021/10/21 23:18:32 by rcheiko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-int				g_d;
 pthread_mutex_t	*g_mut;
 pthread_mutex_t	g_death;
 pthread_mutex_t	g_write;
@@ -56,6 +55,8 @@ char		*ft_itoa(int n);
 //utils
 int			ft_strlen(const char *str);
 int			char_digit(char c);
+void		ft_usleep(int ms);
+long int	actual_time(void);
 //error
 int			error(int ac, char **av);
 int			error_2(int ac, char **av);
@@ -67,7 +68,9 @@ void		*thread_crea(void *arg);
 void		eat(t_philo *ph);
 void		sleep_philo(t_philo *ph);
 void		think(t_philo *ph);
-void		dead_philo(t_philo *ph);
+void		*death_philo(void *arg);
+int			check_death(t_philo *ph, int i);
+int			count_nb_eat_total(t_philo *ph);
 //time
 long int	get_time(void);
 //msg
